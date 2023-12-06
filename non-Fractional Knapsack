@@ -1,0 +1,48 @@
+#include<stdio.h>
+
+int Max(int x, int y) {
+    if (x > y)
+        return x;
+    else
+        return y;
+}
+
+int knapsack(int capacity, int n, int profit[], int weight[]) {
+    int k[n + 1][capacity + 1];
+
+    for (int i = 0; i <= n; i++) {
+        for (int w = 0; w <= capacity; w++) {
+            if (i == 0 || w == 0)
+                k[i][w] = 0;
+            else if (weight[i] <= w)
+                k[i][w] = Max(k[i - 1][w], profit[i] + k[i - 1][w - weight[i]]);
+            else
+                k[i][w] = k[i - 1][w];
+        }
+    }
+
+    // Print the table
+    printf("Dynamic Programming Table:\n");
+    for (int i = 0; i <= n; i++) {
+        for (int w = 0; w <= capacity; w++) {
+            printf("%d\t", k[i][w]);
+        }
+        printf("\n");
+    }
+
+    return k[n][capacity];
+}
+
+int main() {
+    int profit[] = {0, 1, 2, 6, 5};
+    int weight[] = {0, 2, 3, 4, 5};
+    int n = 4;
+    int capacity = 9;
+    int maxProfit;
+
+    maxProfit = knapsack(capacity, n, profit, weight);
+
+    printf("\nMax Profit: %d\n", maxProfit);
+
+    return 0;
+}
